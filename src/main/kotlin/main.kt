@@ -10,5 +10,5 @@ fun main() {
         |12345678123456789
         |12345123451234512345
         """.trimIndent().trimMargin()
-    print(alignText(a, 19, Alignment.JUSTIFY))
+    print(alignText(a, 10, Alignment.JUSTIFY))
 }

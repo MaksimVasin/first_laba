@@ -19,7 +19,7 @@ fun alignText(
     var lineWidthCur: Int = wordsList[0].length // current line width
     for (i in 1 until wordsList.size) {
         // if the next word does not fit, add the words before it to the output text and place spaces
-        if (lineWidthCur + wordsList[i].length - 1 > lineWidth) {
+        if (lineWidthCur + wordsList[i].length - 1 >= lineWidth) {
             lineWidthCur = wordsList[i].length
             oneStringList.add(wordsList[i - 1].trim(' '))
             correctText += setSpace(oneStringList, lineWidth, alignment)
@@ -35,9 +35,14 @@ fun alignText(
     return correctText
 }
 
-fun getWordsList(text: String, lineWidth: Int): ArrayList<String> {
+private fun getWordsList(text: String, lineWidth: Int): ArrayList<String> {
     // replace line breaks with spaces
-    val uncorrectWordsList: ArrayList<String> = text.replace('\n', ' ').split(' ') as ArrayList<String>
+    var uncorrectWordsList = ArrayList<String>()
+    if (" " in text) {
+        uncorrectWordsList = (text.replace('\n', ' ')).split(' ') as ArrayList<String>
+    } else {
+        uncorrectWordsList.add(text)
+    }
 
     val wordsList: ArrayList<String> = ArrayList()
     for (i in 0 until uncorrectWordsList.size) {
@@ -60,7 +65,11 @@ fun getWordsList(text: String, lineWidth: Int): ArrayList<String> {
 }
 
 
-fun setSpace(stringList: ArrayList<String>, lineWidth: Int = 120, alignment: Alignment = Alignment.LEFT, ): String {
+private fun setSpace(
+    stringList: ArrayList<String>,
+    lineWidth: Int = 120,
+    alignment: Alignment = Alignment.LEFT,
+): String {
     var countSpace = lineWidth
     // counting required spaces
     for (i in 0 until stringList.size) {
@@ -84,16 +93,16 @@ fun setSpace(stringList: ArrayList<String>, lineWidth: Int = 120, alignment: Ali
     return stringWithSpace + '\n'
 }
 
-fun left(stringList: ArrayList<String>): String {
+private fun left(stringList: ArrayList<String>): String {
     // collecting a string from words
     var stringWithSpace = ""
     for (i in 0 until stringList.size) {
         stringWithSpace += stringList[i]
     }
-    return  stringWithSpace
+    return stringWithSpace
 }
 
-fun right(stringList: ArrayList<String>, countSpace: Int): String {
+private fun right(stringList: ArrayList<String>, countSpace: Int): String {
     // add the required number of spaces and collecting a string from words
     var stringWithSpace: String = " ".repeat(countSpace)
     for (i in 0 until stringList.size) {
@@ -102,12 +111,12 @@ fun right(stringList: ArrayList<String>, countSpace: Int): String {
     return stringWithSpace
 }
 
-fun center(stringList: ArrayList<String>, countSpace: Int): String {
+private fun center(stringList: ArrayList<String>, countSpace: Int): String {
     // add the required number of spaces and collecting a string from words
     return right(stringList, countSpace / 2)
 }
 
-fun justify(stringList: ArrayList<String>, countSpace: Int): String {
+private fun justify(stringList: ArrayList<String>, countSpace: Int): String {
     var stringWithSpace = ""
     /* add the required number of spaces between words.
     First the minimum spaces, and then the rest spaces */
